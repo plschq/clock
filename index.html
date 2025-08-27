@@ -3,7 +3,160 @@
     <head>
         <meta charset="UTF-8">
         <title>Date time counter</title>
-        <link rel="stylesheet" href="style.css">
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+
+/* ::-webkit-scrollbar {
+    width: 0;
+} */
+:root {
+    --font: 'Nunito', sans-serif;
+    --font-size: 15vw;
+}
+
+
+html {
+    width: 100%;
+    height: 100%;
+    scroll-behavior: smooth;
+}
+body {
+    background: transparent;
+}
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+
+div.sep {
+    height: 1px;
+    background-color: #d0d0d0;
+}
+div.heading {
+    font-family: var(--font);
+    display: flex;
+    justify-content: center;
+    padding-bottom: 20px;
+    font-size: 70px;
+    letter-spacing: 5px;
+}
+
+
+svg.bi-gear-fill {
+    transition: 0.3s;
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+svg.bi-gear-fill:hover {
+    transition: 0.3s;
+    transform: rotate(70deg);
+}
+
+
+div#datetime-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-family: var(--font);
+    font-weight: 700;
+    height: 100vh
+}
+div#date-container,
+div#time-container {
+    text-align: center;
+}
+span#time-hms {
+    font-size: var(--font-size);
+    margin: 0;
+    padding: 0;
+}
+span#time-ms {
+    font-size: calc(var(--font-size) * 0.71);
+}
+span#date {
+    font-size: calc(var(--font-size) * 0.43);
+}
+
+
+ul#settings {
+    background: #ffffff;
+    padding: 20px;
+    font-family: var(--font);
+    font-weight: 500;
+    list-style: none;
+}
+ul#settings li.element {
+    padding: 5px;
+}
+ul#settings li.element input {
+    border: 2px solid gray;
+    width: 50px;
+    height: 50px;
+    margin: 0;
+    padding: 0;
+}
+ul#settings li.element input[type='color'] {
+    transform: translateY(2px);
+}
+ul#settings li.element input[type='checkbox'] {
+    transform: translateY(8px);
+}
+ul#settings li.element input[type='number'],
+div#settings div.element input[type='input'] {
+    font-size: 40px;
+    text-align: end;
+    width: 3.5ch;
+    font-weight: 400;
+}
+ul#settings li.element input[type='radio'] {
+    width: 35px;
+    height: 35px;
+    transform: translateY(3px);
+}
+ul#settings li.element input[type='file'] {
+    width: auto;
+    height: auto;
+    border: 0;
+}
+ul#settings li.element label {
+    font-size: 50px;
+    padding-right: 10px;
+}
+ul#settings li.element label[for='bg-gradient-selector-deg'] {
+    padding: 0;
+    font-size: 50px;
+}
+ul#settings li.element label[for='bg-gradient-selector-2'] {
+    padding: 0;
+}
+ul#settings li.element label[for='bg-gradient-selector-2'] {
+    padding: 0;
+}
+ul#settings li.element label[for="background-gradient-radio"] {
+    display: inline-flex;
+    flex-wrap: wrap;
+    padding: 0;
+}
+div.date-display-selector-container-element label,
+div.background-container-element label {
+    font-size: 40px;
+    padding-left: 5px;
+    font-weight: 300;
+}
+
+        </style>
         <style id="scrollbar-style"></style>
     </head>
     <body>
@@ -26,10 +179,8 @@
                 <span id="time-ms"></span>
             </div>
         </div>
-        <div class="bg-white">
-            <div class="sep"></div>
-            <div class="heading">Settings</div>
-        </div>
+        <div class="sep"></div>
+        <div class="heading">Settings</div>
         <ul id="settings">
             <li class="element">
                 <label for="font-color-selector">Text color:</label>
@@ -57,15 +208,13 @@
                     <div class="background-container-element">
                         <input type="radio" name="background-radio" id="background-gradient-radio">
                         <label for="background-gradient-radio">
+                            <label for="background-gradient-selector">Background gradient:</label>
                             <div>
-                                <label for="background-gradient-selector">Background gradient:</label>
-                                <div>
-                                    <input type="number" name="bg-gradient-selector-deg" id="bg-gradient-selector-deg" value="0">
-                                    <label for="bg-gradient-selector-deg">deg,</label>
-                                    <input type="color" name="bg-gradient-selector-1" id="bg-gradient-selector-1" value="#ffffff">
-                                    <label for="bg-gradient-selector-2">and</label>
-                                    <input type="color" name="bg-gradient-selector-2" id="bg-gradient-selector-2" value="#ffffff">
-                                </div>
+                                <input type="number" name="bg-gradient-selector-deg" id="bg-gradient-selector-deg" value="0">
+                                <label for="bg-gradient-selector-deg">deg,</label>
+                                <input type="color" name="bg-gradient-selector-1" id="bg-gradient-selector-1" value="#ffffff">
+                                <label for="bg-gradient-selector-2">and</label>
+                                <input type="color" name="bg-gradient-selector-2" id="bg-gradient-selector-2" value="#ffffff">
                             </div>
                         </label>
                     </div>
@@ -122,5 +271,102 @@
             </li>
         </ul>
     </body>
-    <script src="script.js"></script>
+    <script>
+        let millisecondsVisible = true;
+let scrollbarVisible = true;
+
+function toLength(s, l) {
+    return '0'.repeat(l - s.toString().length) + s.toString();
+}
+function getDateTime() {
+    const date = new Date();
+    return [
+        toLength(date.getFullYear(), 4),
+        toLength(date.getMonth() + 1, 2),
+        toLength(date.getDate(), 2),
+        toLength(date.getHours(), 2),
+        toLength(date.getMinutes(), 2),
+        toLength(date.getSeconds(), 2),
+        toLength(date.getMilliseconds(), 3)
+    ];
+}
+function fillLabels() {
+    const dateTimeArray = getDateTime();
+    document.querySelector('span#time-hms').innerHTML = dateTimeArray[3] + ':' + dateTimeArray[4] + ':' + dateTimeArray[5];
+    document.querySelector('span#time-ms').innerHTML = '.' + dateTimeArray[6][0];
+    document.querySelector('span#date').innerHTML = dateTimeArray[0] + '-' + dateTimeArray[1] + '-' + dateTimeArray[2];
+}
+
+
+function changeBgColor() {
+    if (document.querySelector('input#background-color-radio').checked) {
+        document.querySelector('div#datetime-container').style.background = document.querySelector('input#background-color-selector').value;
+    }
+}
+function changeBgGradient() {
+    const degreesValue = document.querySelector('input#bg-gradient-selector-deg').value;
+    const degreesInput = document.querySelector('input#bg-gradient-selector-deg');
+    const color_1 = document.querySelector('input#bg-gradient-selector-1').value;
+    const color_2 = document.querySelector('input#bg-gradient-selector-2').value;
+    if (document.querySelector('input#background-gradient-radio').checked) {
+        if (degreesValue > 360) {
+            degreesInput.value = 360;
+        } else if (degreesValue < 0) {
+            degreesInput.value = 0;
+        } else if (degreesValue === '') {
+            degreesInput.value = '0';
+        }
+        document.querySelector('div#datetime-container').style.background = 'linear-gradient(' + degreesValue + 'deg, ' + color_1 + ', ' + color_2 + ')';
+    }
+}
+function changeBgImage() {}
+function changeFontColor() {
+    const value = document.querySelector('input#font-color-selector').value;
+    document.querySelector('div#datetime-container').style.color = value;
+    document.querySelector('svg').style.color = value;
+}
+function millisecondsToggle() {
+    const label = document.querySelector('span#time-ms');
+    if (millisecondsVisible) {
+        label.style.display = 'none';
+        millisecondsVisible = false;
+    } else if (!millisecondsVisible) {
+        label.style.display = 'inline';
+        millisecondsVisible = true;
+    }
+}
+function scrollbarToggle() {
+    const style = document.querySelector('head style#scrollbar-style');
+    if (scrollbarVisible) {
+        style.innerHTML = '::-webkit-scrollbar {display: none;}';
+        scrollbarVisible = false;
+    } else if (!scrollbarVisible) {
+        style.innerHTML = '';
+        scrollbarVisible = true;
+    }
+    
+}
+
+
+function startup() {
+    document.querySelector('input#background-color-selector').oninput = changeBgColor;
+    document.querySelector('input#background-color-radio').oninput = changeBgColor;
+    document.querySelector('input#bg-gradient-selector-deg').oninput = changeBgGradient;
+    document.querySelector('input#bg-gradient-selector-1').oninput = changeBgGradient;
+    document.querySelector('input#bg-gradient-selector-2').oninput = changeBgGradient;
+    document.querySelector('input#background-gradient-radio').oninput = changeBgGradient;
+    document.querySelector('input#background-image-radio').oninput = changeBgImage;
+    document.querySelector('input#background-image-selector').oninput = changeBgImage;
+    document.querySelector('input#font-color-selector').oninput = changeFontColor;
+    document.querySelector('input#show-ms-checkbox').oninput = millisecondsToggle;
+    document.querySelector('input#hide-scrollbar-checkbox').oninput = scrollbarToggle;
+    
+    setInterval(fillLabels, 50);
+}
+function run() {
+    startup();
+}
+run();
+
+    </script>
 </html>
