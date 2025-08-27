@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap');
+
+
+:root {
+    --font: 'Nunito', sans-serif;
+    --font-size: 15vw;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+body {
+    background: transparent;
+}
+html, body {
+    margin: 0;
+    padding: 0;
+    
+}
+
+div#datetime-container {
+    --ratio: 0px;
+    margin-top: calc(50vh - var(--font-size) - var(--ratio));
+    font-family: var(--font);
+}
+div#date-container, div#time-container {
+    text-align: center;
+}
+span#time-hms {
+    font-size: var(--font-size);
+    margin: 0;
+    padding: 0;
+}
+span#time-ms {
+    font-size: calc(var(--font-size) * 0.71);
+}
+span#date {
+    font-size: calc(var(--font-size) * 0.43);
+}
