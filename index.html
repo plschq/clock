@@ -2,6 +2,8 @@
 <html>
     <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <meta name="format-detection" content="telephone=no">
         <title>Online date and time viewer</title>
         <style type="text/css" id="imports">
             @import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Nunito:wght@300;400;500;700&display=swap');
@@ -31,7 +33,7 @@
             :root {
                 --font-1: 'Nunito', sans-serif;
                 --font-2: 'Montserrat', sans-serif;
-                --datetime-font-size: 15vw;
+                --datetime-font-size: 200px;
             }
         </style>
         <style type="text/css" id="custom-blocks-style">
@@ -46,6 +48,7 @@
                 padding-bottom: 20px;
                 font-size: 70px;
                 letter-spacing: 5px;
+                animation: heading-appearing 1s;
             }
         </style>
         <style type="text/css" id="icons-style">
@@ -59,6 +62,7 @@
                 right: 10px;
                 cursor: pointer;
                 color: #000;
+                animation: icon-appearing 1s;
             }
             svg.bi-gear-fill:hover {
                 transition: 0.3s;
@@ -73,7 +77,8 @@
                 justify-content: center;
                 font-family: var(--font-1);
                 font-weight: 700;
-                height: 100vh
+                height: 100vh;
+                animation: datetime-appearing 1s;
             }
             div#date-container, div#time-container {
                 text-align: center;
@@ -95,15 +100,18 @@
                 font-family: var(--font-2);
                 font-weight: 500;
                 list-style: none;
+                animation: settings-blocks-appearing 1s;
             }
-            #settings ul {}
+            /* #settings ul {
+
+            } */
             .settings-item {
                 padding: 10px;
                 background-color: #eaeaea;
                 width: fit-content;
                 border-radius: 10px;
                 margin: 10px;
-                display: inline-block;
+                /* display: inline-block; */
             }
             .settings-item input {
                 border: 2px solid gray;
@@ -140,13 +148,50 @@
         </style>
         <style type="text/css" id="adaptability">
             @media (max-width: 1200px) {
-
+                :root {--datetime-font-size: 190px;}
+            }
+            @media (max-width: 992px) {
+                :root {--datetime-font-size: 150px;}
+            }
+            @media (max-width: 767px) {
+                :root {--datetime-font-size: 100px;}
+            }
+            @media (max-width: 567px) {
+                :root {--datetime-font-size: 80px;}
+            }
+            @media (max-width: 450px) {
+                :root {--datetime-font-size: 70px;}
+            }
+        </style>
+        <style type="text/css" id="animations">
+            @keyframes datetime-appearing {
+                from {
+                    color: transparent;
+                    transform: translateY(30px);
+                }
+            }
+            @keyframes icon-appearing {
+                from {
+                    color: transparent;
+                    transform: translateY(-100px);
+                }
+            }
+            @keyframes heading-appearing {
+                from {
+                    color: transparent;
+                    letter-spacing: 15px;
+                }
+            }
+            @keyframes settings-blocks-appearing {
+                from {
+                    transform: translateX(-300px);
+                }
             }
         </style>
         <style type="text/css" id="scrollbar-style"></style>
     </head>
     <body>
-        <a href="#settings">
+        <a href="#settings" title="Show settings">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear-fill" viewBox="0 0 16 16">
                 <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 
                 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 
@@ -204,7 +249,7 @@
             let dateVisible = true;
             let secondsVisible = true;
         </script>
-        <script type="text/javascript" id="datetime-script">
+        <script type="text/javascript" id="useful-functions">
             function toLength(s, l) {
                 return '0'.repeat(l - s.toString().length) + s.toString();
             }
@@ -220,6 +265,26 @@
                     toLength(date.getMilliseconds(), 3)
                 ];
             }
+            function $(identificator) {
+                return document.getElementById(identificator);
+            }
+            function qs(selectors) {
+                return document.querySelector(selectors);
+            }
+            function onInput(element, action) {
+                element.oninput = action;
+            }
+        </script>
+        <script type="text/javascript" id="adaptability">
+            function onWindowResize() {
+                if (window.innerHeight < 400) {
+                    
+                } else {
+                    
+                }
+            }
+        </script>
+        <script type="text/javascript" id="datetime-script">
             function fillDateTime() {
                 const dateTimeArray = getDateTime();
                 let date = dateTimeArray[0] + '-' + dateTimeArray[1] + '-' + dateTimeArray[2];
@@ -227,21 +292,19 @@
                 if (secondsVisible) {
                     time = time + ':' + dateTimeArray[5];
                 }
-                document.querySelector('span#date').innerHTML = date;
-                document.querySelector('span#time').innerHTML = time;
-                document.querySelector('span#time-ms').innerHTML = '.' + dateTimeArray[6][0];
+                $('date').innerHTML = date;
+                $('time').innerHTML = time;
+                $('time-ms').innerHTML = '.' + dateTimeArray[6][0];
             }
         </script>
         <script type="text/javascript" id="settings-script">
             function changeTextColor() {
-                const value = document.querySelector('input#text-color-selector').value;
-                document.querySelector('span#date').style.color = value;
-                document.querySelector('span#time').style.color = value;
-                document.querySelector('span#time-ms').style.color = value;
+                const value = $('text-color-selector').value;
+                $('datetime-container').style.color = value;
                 document.querySelectorAll('svg').forEach((element) => {element.style.color = value});
             }
             function millisecondsToggle() {
-                const label = document.querySelector('span#time-ms');
+                const label = $('time-ms');
                 if (millisecondsVisible) {
                     label.style.display = 'none';
                     millisecondsVisible = false;
@@ -251,7 +314,7 @@
                 }
             }
             function scrollbarToggle() {
-                const style = document.querySelector('head style#scrollbar-style');
+                const style = $('scrollbar-style');
                 if (scrollbarVisible) {
                     style.innerHTML = 'body::-webkit-scrollbar {display: none;} body {-ms-overflow-style: none; scrollbar-width: none;}';
                     scrollbarVisible = false;
@@ -261,7 +324,7 @@
                 }
             }
             function settingsButtonToggle() {
-                const label = document.querySelector('svg.bi-gear-fill');
+                const label = qs('svg.bi-gear-fill');
                 if (settingsButtonVisible) {
                     label.style.display = 'none';
                     settingsButtonVisible = false;
@@ -271,7 +334,7 @@
                 }
             }
             function dateToggle() {
-                const label = document.querySelector('span#date');
+                const label = $('date');
                 if (dateVisible) {
                     label.style.display = 'none';
                     dateVisible = false;
@@ -290,13 +353,14 @@
         </script>
         <script type="text/javascript" id="launcher">
             function startup() {
-                document.querySelector('input#text-color-selector').oninput = changeTextColor;
-                document.querySelector('input#hide-ms-checkbox').oninput = millisecondsToggle;
-                document.querySelector('input#hide-scrollbar-checkbox').oninput = scrollbarToggle;
-                document.querySelector('input#hide-settings-button-checkbox').oninput = settingsButtonToggle;
-                document.querySelector('input#hide-date-checkbox').oninput = dateToggle;
-                /* document.querySelector('input#hide-seconds-checkbox').oninput = secondsToggle; */
+                $('text-color-selector').oninput = changeTextColor;
+                $('hide-ms-checkbox').oninput = millisecondsToggle;
+                $('hide-scrollbar-checkbox').oninput = scrollbarToggle;
+                $('hide-settings-button-checkbox').oninput = settingsButtonToggle;
+                $('hide-date-checkbox').oninput = dateToggle;
+                /* $('hide-seconds-checkbox').oninput = secondsToggle; */
                 setInterval(fillDateTime, 50);
+                window.addEventListener('resize', onWindowResize);
             }
             function run() {
                 startup();
