@@ -1,80 +1,78 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" style="background: rgb(255, 255, 255);">
     <head>
         <meta charset="UTF-8">
         <title>Date time counter</title>
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@100;200;300;400;500;600;700;800;900&display=swap');
-
-
-/* ::-webkit-scrollbar {
-    width: 0;
-} */
 :root {
     --font: 'Nunito', sans-serif;
     --font-size: 15vw;
 }
-
-
 html {
     width: 100%;
     height: 100%;
-    scroll-behavior: smooth;
 }
 body {
     background: transparent;
 }
-html,
-body {
+html, body {
     margin: 0;
     padding: 0;
 }
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
-
-div.sep {
-    height: 1px;
-    background-color: #d0d0d0;
-}
-div.heading {
-    font-family: var(--font);
-    display: flex;
-    justify-content: center;
-    padding-bottom: 20px;
-    font-size: 70px;
-    letter-spacing: 5px;
-}
-
-
 svg.bi-gear-fill {
     transition: 0.3s;
-    position: absolute;
+    border-radius: 50%;
     width: 50px;
     height: 50px;
-    border-radius: 50%;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
 }
 svg.bi-gear-fill:hover {
     transition: 0.3s;
-    transform: rotate(70deg);
+    transform: rotate(45deg);
 }
-
-
+input.color {
+    width: 50px;
+    height: 50px;
+    border: 0;
+}
+div.icon {
+    transition: 0.3s;
+    width: 50px;
+    height: 50px;
+    padding: 10px;
+    border-radius: 50%;
+    position: absolute;
+    top: 15px;
+    cursor: pointer;
+}
+div.icon:hover {
+    transition: 0.3s;
+}
+div#settings-icon {
+    right: 15px;
+}
+div#settings-container {
+    background: transparent;
+    position: absolute;
+    top: 0;
+    padding: 10px;
+    font-family: var(--font);
+    font-weight: 500;
+}
+div#settings-container label {
+    font-size: 50px;
+    padding-left: 10px;
+}
+div#settings-container input {
+    border: 2px solid gray;
+}
 div#datetime-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    --ratio: 0px;
+    margin-top: calc(50vh - var(--font-size) - var(--ratio));
     font-family: var(--font);
     font-weight: 700;
-    height: 100vh
 }
-div#date-container,
-div#time-container {
+div#date-container, div#time-container {
     text-align: center;
 }
 span#time-hms {
@@ -89,88 +87,25 @@ span#date {
     font-size: calc(var(--font-size) * 0.43);
 }
 
-
-ul#settings {
-    background: #ffffff;
-    padding: 20px;
-    font-family: var(--font);
-    font-weight: 500;
-    list-style: none;
-}
-ul#settings li.element {
-    padding: 5px;
-}
-ul#settings li.element input {
-    border: 2px solid gray;
-    width: 50px;
-    height: 50px;
-    margin: 0;
-    padding: 0;
-}
-ul#settings li.element input[type='color'] {
-    transform: translateY(2px);
-}
-ul#settings li.element input[type='checkbox'] {
-    transform: translateY(8px);
-}
-ul#settings li.element input[type='number'],
-div#settings div.element input[type='input'] {
-    font-size: 40px;
-    text-align: end;
-    width: 3.5ch;
-    font-weight: 400;
-}
-ul#settings li.element input[type='radio'] {
-    width: 35px;
-    height: 35px;
-    transform: translateY(3px);
-}
-ul#settings li.element input[type='file'] {
-    width: auto;
-    height: auto;
-    border: 0;
-}
-ul#settings li.element label {
-    font-size: 50px;
-    padding-right: 10px;
-}
-ul#settings li.element label[for='bg-gradient-selector-deg'] {
-    padding: 0;
-    font-size: 50px;
-}
-ul#settings li.element label[for='bg-gradient-selector-2'] {
-    padding: 0;
-}
-ul#settings li.element label[for='bg-gradient-selector-2'] {
-    padding: 0;
-}
-ul#settings li.element label[for="background-gradient-radio"] {
-    display: inline-flex;
-    flex-wrap: wrap;
-    padding: 0;
-}
-div.date-display-selector-container-element label,
-div.background-container-element label {
-    font-size: 40px;
-    padding-left: 5px;
-    font-weight: 300;
-}
-
         </style>
-        <style id="scrollbar-style"></style>
     </head>
     <body>
-        <a href="#settings">
+        <div id="settings-icon" class="icon icon-visible">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear-fill" viewBox="0 0 16 16">
-                <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 
-                1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 
-                1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 
-                2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 
-                0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 
-                10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+                <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"></path>
             </svg>
-        </a>
-        <div id="datetime-container">
+        </div>
+        <div id="settings-container" style="display: none;">
+            <div class="element">
+                <input type="color" class="color" name="bg-color-selector" id="bg-color-selector" value="#ffffff">
+                <label for="bg-color-selector">Background color</label>
+            </div>
+            <div class="element">
+                <input type="color" class="color" name="font-color-selector" id="font-color-selector" value="#000000">
+                <label for="font-color-selector">Text color</label>
+            </div>
+        </div>
+        <div id="datetime-container" style="color: rgb(0, 0, 0);">
             <div id="date-container">
                 <span id="date"></span>
             </div>
@@ -179,102 +114,9 @@ div.background-container-element label {
                 <span id="time-ms"></span>
             </div>
         </div>
-        <div class="sep"></div>
-        <div class="heading">Settings</div>
-        <ul id="settings">
-            <li class="element">
-                <label for="font-color-selector">Text color:</label>
-                <input type="color" name="font-color-selector" id="font-color-selector" value="#000000">
-            </li>
-            <li class="element">
-                <label for="show-ms-checkbox">Show milliseconds:</label>
-                <input type="checkbox" name="show-ms-checkbox" id="show-ms-checkbox" checked>
-            </li>
-            <li class="element">
-                <label for="hide-scrollbar-checkbox">Hide scrollbar:</label>
-                <input type="checkbox" name="hide-scrollbar-checkbox" id="hide-scrollbar-checkbox">
-            </li>
-            <br><br>
-            <li class="element big">
-                <label for="background-container">Background:</label>
-                <div id="background-container">
-                    <div class="background-container-element">
-                        <input type="radio" name="background-radio" id="background-color-radio" checked>
-                        <label for="background-color-radio">
-                            <label for="background-color-selector">Background color:</label>
-                            <input type="color" name="background-color-selector" id="background-color-selector" value="#ffffff">
-                        </label>
-                    </div>
-                    <div class="background-container-element">
-                        <input type="radio" name="background-radio" id="background-gradient-radio">
-                        <label for="background-gradient-radio">
-                            <label for="background-gradient-selector">Background gradient:</label>
-                            <div>
-                                <input type="number" name="bg-gradient-selector-deg" id="bg-gradient-selector-deg" value="0">
-                                <label for="bg-gradient-selector-deg">deg,</label>
-                                <input type="color" name="bg-gradient-selector-1" id="bg-gradient-selector-1" value="#ffffff">
-                                <label for="bg-gradient-selector-2">and</label>
-                                <input type="color" name="bg-gradient-selector-2" id="bg-gradient-selector-2" value="#ffffff">
-                            </div>
-                        </label>
-                    </div>
-                    <div class="background-container-element">
-                        <input type="radio" name="background-radio" id="background-image-radio">
-                        <label for="background-image-radio">
-                            <label for="background-image-selector">Background image:</label>
-                            <input type="file" name="background-image-selector" id="background-image-selector">
-                        </label>
-                    </div>
-                </div>
-            </li>
-            <br><br>
-            <li class="element big">
-                <label for="date-display-selector-container">Date format:</label>
-                <div id="date-display-selector-container">
-                    <div class="date-display-selector-container-element">
-                        <input type="radio" name="date-display-selector" id="date-display-selector-1" checked>
-                        <label for="date-display-selector-1">YYYY-MM-DD</label>
-                    </div>
-                    <div class="date-display-selector-container-element">
-                        <input type="radio" name="date-display-selector" id="date-display-selector-2">
-                        <label for="date-display-selector-2">YYYY.MM.DD</label>
-                    </div>
-                    <div class="date-display-selector-container-element">
-                        <input type="radio" name="date-display-selector" id="date-display-selector-3">
-                        <label for="date-display-selector-3">YY-MM-DD</label>
-                    </div>
-                    <div class="date-display-selector-container-element">
-                        <input type="radio" name="date-display-selector" id="date-display-selector-4">
-                        <label for="date-display-selector-4">YY.MM.DD</label>
-                    </div>
-                    <div class="date-display-selector-container-element">
-                        <input type="radio" name="date-display-selector" id="date-display-selector-5">
-                        <label for="date-display-selector-5">DD-MM-YYYY</label>
-                    </div>
-                    <div class="date-display-selector-container-element">
-                        <input type="radio" name="date-display-selector" id="date-display-selector-6">
-                        <label for="date-display-selector-6">DD.MM.YYYY</label>
-                    </div>
-                    <div class="date-display-selector-container-element">
-                        <input type="radio" name="date-display-selector" id="date-display-selector-7">
-                        <label for="date-display-selector-7">DD-MM-YY</label>
-                    </div>
-                    <div class="date-display-selector-container-element">
-                        <input type="radio" name="date-display-selector" id="date-display-selector-8">
-                        <label for="date-display-selector-8">DD.MM.YY</label>
-                    </div>
-                    <div class="date-display-selector-container-element">
-                        <input type="radio" name="date-display-selector" id="date-display-selector-9">
-                        <label for="date-display-selector-9">DD Month, YYYY</label>
-                    </div>
-                </div>
-            </li>
-        </ul>
     </body>
     <script>
-        let millisecondsVisible = true;
-let scrollbarVisible = true;
-
+        let isSettingsVisible = false;
 function toLength(s, l) {
     return '0'.repeat(l - s.toString().length) + s.toString();
 }
@@ -296,77 +138,31 @@ function fillLabels() {
     document.querySelector('span#time-ms').innerHTML = '.' + dateTimeArray[6][0];
     document.querySelector('span#date').innerHTML = dateTimeArray[0] + '-' + dateTimeArray[1] + '-' + dateTimeArray[2];
 }
-
-
 function changeBgColor() {
-    if (document.querySelector('input#background-color-radio').checked) {
-        document.querySelector('div#datetime-container').style.background = document.querySelector('input#background-color-selector').value;
-    }
+    document.querySelector('html').style.background = document.querySelector('input#bg-color-selector').value;
 }
-function changeBgGradient() {
-    const degreesValue = document.querySelector('input#bg-gradient-selector-deg').value;
-    const degreesInput = document.querySelector('input#bg-gradient-selector-deg');
-    const color_1 = document.querySelector('input#bg-gradient-selector-1').value;
-    const color_2 = document.querySelector('input#bg-gradient-selector-2').value;
-    if (document.querySelector('input#background-gradient-radio').checked) {
-        if (degreesValue > 360) {
-            degreesInput.value = 360;
-        } else if (degreesValue < 0) {
-            degreesInput.value = 0;
-        } else if (degreesValue === '') {
-            degreesInput.value = '0';
-        }
-        document.querySelector('div#datetime-container').style.background = 'linear-gradient(' + degreesValue + 'deg, ' + color_1 + ', ' + color_2 + ')';
-    }
-}
-function changeBgImage() {}
 function changeFontColor() {
-    const value = document.querySelector('input#font-color-selector').value;
+    let value = document.querySelector('input#font-color-selector').value;
     document.querySelector('div#datetime-container').style.color = value;
     document.querySelector('svg').style.color = value;
 }
-function millisecondsToggle() {
-    const label = document.querySelector('span#time-ms');
-    if (millisecondsVisible) {
-        label.style.display = 'none';
-        millisecondsVisible = false;
-    } else if (!millisecondsVisible) {
-        label.style.display = 'inline';
-        millisecondsVisible = true;
+function settingsToggle() {
+    const settingsContainer = document.querySelector('div#settings-container')
+    const datetimeContainer = document.querySelector('div#datetime-container')
+    if (isSettingsVisible) {
+        settingsContainer.style.display = 'none';
+        datetimeContainer.style.display = 'block';
+        isSettingsVisible = false;
+    } else if (!isSettingsVisible) {
+        settingsContainer.style.display = 'block';
+        datetimeContainer.style.display = 'none';
+        isSettingsVisible = true;
     }
 }
-function scrollbarToggle() {
-    const style = document.querySelector('head style#scrollbar-style');
-    if (scrollbarVisible) {
-        style.innerHTML = '::-webkit-scrollbar {display: none;}';
-        scrollbarVisible = false;
-    } else if (!scrollbarVisible) {
-        style.innerHTML = '';
-        scrollbarVisible = true;
-    }
-    
-}
-
-
-function startup() {
-    document.querySelector('input#background-color-selector').oninput = changeBgColor;
-    document.querySelector('input#background-color-radio').oninput = changeBgColor;
-    document.querySelector('input#bg-gradient-selector-deg').oninput = changeBgGradient;
-    document.querySelector('input#bg-gradient-selector-1').oninput = changeBgGradient;
-    document.querySelector('input#bg-gradient-selector-2').oninput = changeBgGradient;
-    document.querySelector('input#background-gradient-radio').oninput = changeBgGradient;
-    document.querySelector('input#background-image-radio').oninput = changeBgImage;
-    document.querySelector('input#background-image-selector').oninput = changeBgImage;
-    document.querySelector('input#font-color-selector').oninput = changeFontColor;
-    document.querySelector('input#show-ms-checkbox').oninput = millisecondsToggle;
-    document.querySelector('input#hide-scrollbar-checkbox').oninput = scrollbarToggle;
-    
-    setInterval(fillLabels, 50);
-}
-function run() {
-    startup();
-}
-run();
+document.querySelector('input#bg-color-selector').oninput = changeBgColor;
+document.querySelector('input#font-color-selector').oninput = changeFontColor;
+document.querySelector('div#settings-icon').onclick = settingsToggle;
+setInterval(fillLabels, 50);
 
     </script>
 </html>
