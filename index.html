@@ -1,168 +1,382 @@
 <!DOCTYPE html>
-<html lang="en" style="background: rgb(255, 255, 255);">
+<html>
     <head>
-        <meta charset="UTF-8">
-        <title>Date time counter</title>
-        <style>
-            @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@100;200;300;400;500;600;700;800;900&display=swap');
-:root {
-    --font: 'Nunito', sans-serif;
-    --font-size: 15vw;
-}
-html {
-    width: 100%;
-    height: 100%;
-}
-body {
-    background: transparent;
-}
-html, body {
-    margin: 0;
-    padding: 0;
-}
-svg.bi-gear-fill {
-    transition: 0.3s;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-}
-svg.bi-gear-fill:hover {
-    transition: 0.3s;
-    transform: rotate(45deg);
-}
-input.color {
-    width: 50px;
-    height: 50px;
-    border: 0;
-}
-div.icon {
-    transition: 0.3s;
-    width: 50px;
-    height: 50px;
-    padding: 10px;
-    border-radius: 50%;
-    position: absolute;
-    top: 15px;
-    cursor: pointer;
-}
-div.icon:hover {
-    transition: 0.3s;
-}
-div#settings-icon {
-    right: 15px;
-}
-div#settings-container {
-    background: transparent;
-    position: absolute;
-    top: 0;
-    padding: 10px;
-    font-family: var(--font);
-    font-weight: 500;
-}
-div#settings-container label {
-    font-size: 50px;
-    padding-left: 10px;
-}
-div#settings-container input {
-    border: 2px solid gray;
-}
-div#datetime-container {
-    --ratio: 0px;
-    margin-top: calc(50vh - var(--font-size) - var(--ratio));
-    font-family: var(--font);
-    font-weight: 700;
-}
-div#date-container, div#time-container {
-    text-align: center;
-}
-span#time-hms {
-    font-size: var(--font-size);
-    margin: 0;
-    padding: 0;
-}
-span#time-ms {
-    font-size: calc(var(--font-size) * 0.71);
-}
-span#date {
-    font-size: calc(var(--font-size) * 0.43);
-}
-
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <meta name="format-detection" content="telephone=no">
+        <title>Online date and time viewer</title>
+        <style type="text/css" id="imports">
+            @import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Nunito:wght@300;400;500;700&display=swap');
         </style>
+        <style type="text/css" id="reset">
+            * {
+                padding: 0;
+                margin: 0;
+                border: 0;
+                width: auto;
+                height: auto;
+            }
+            a {
+                text-decoration: none;
+            }
+            ol, ul {
+                list-style: none;
+            }
+            html, body {
+                scroll-behavior: smooth;
+                background-color: #fff;
+            }
+        </style>
+        <style type="text/css" id="variables">
+            :root {
+                --font-1: 'Nunito', sans-serif;
+                --font-2: 'Montserrat', sans-serif;
+                --datetime-font-size-ratio-w: 15vw;
+                --datetime-font-size-ratio-h: 52vh;
+                --time-ms-ratio: .71;
+                --date-ratio: .43;
+                --heading-font-size: 70px;
+                --settings-font-size: 50px;
+                --equilateral-input-size: var(--settings-font-size);
+                --icon-size: var(--equilateral-input-size);
+            }
+        </style>
+        <style type="text/css" id="useful">
+            div.separator {
+                height: 1px;
+                background-color: #d0d0d0;
+            }
+            div.heading {
+                font-family: var(--font-1);
+                display: flex;
+                justify-content: center;
+                padding-bottom: 20px;
+                font-size: var(--heading-font-size);
+                letter-spacing: 5px;
+                animation: heading-appearing 1s;
+            }
+            .invisible {
+                display: none;
+            }
+        </style>
+        <style type="text/css" id="icons-style">
+            svg.icon {
+                transition: transform 0.3s, width 0, height 0;
+                position: absolute;
+                width: var(--icon-size);
+                height: var(--icon-size);
+                border-radius: 50%;
+                top: 10px;
+                right: 10px;
+                cursor: pointer;
+                color: #000;
+                animation: icon-appearing 1s;
+            }
+            svg.icon:hover {
+                transition: 0.3s;
+                transform: rotate(70deg);
+                color: #000;
+            }
+        </style>
+        <style type="text/css" id="datetime-style">
+            div#datetime-container {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                font-family: var(--font-1);
+                font-weight: 700;
+                height: 100vh;
+                animation: datetime-appearing 1s;
+            }
+            div#date-container, div#time-container {
+                text-align: center;
+            }
+            div#datetime-container.adjust-by-width span#time {
+                font-size: var(--datetime-font-size-ratio-w);
+            }
+            div#datetime-container.adjust-by-width span#time-ms {
+                font-size: calc(var(--datetime-font-size-ratio-w) * var(--time-ms-ratio));
+            }
+            div#datetime-container.adjust-by-width span#date {
+                font-size: calc(var(--datetime-font-size-ratio-w) * var(--date-ratio));
+            }
+            div#datetime-container.adjust-by-height span#time {
+                font-size: var(--datetime-font-size-ratio-h);
+            }
+            div#datetime-container.adjust-by-height span#time-ms {
+                font-size: calc(var(--datetime-font-size-ratio-h) * var(--time-ms-ratio));
+            }
+            div#datetime-container.adjust-by-height span#date {
+                font-size: calc(var(--datetime-font-size-ratio-h) * var(--date-ratio));
+            }
+        </style>
+        <style type="text/css" id="settings-style">
+            #settings {
+                background: #ffffff;
+                padding: 10px;
+                font-family: var(--font-2);
+                font-weight: 500;
+                list-style: none;
+                animation: settings-blocks-appearing 1s;
+            }
+            /* #settings ul {
+
+            } */
+            .settings-item {
+                padding: 10px;
+                background-color: #eaeaea;
+                width: fit-content;
+                border-radius: 10px;
+                margin: 10px;
+                /* display: inline-block; */
+            }
+            .settings-item input {
+                border: 2px solid gray;
+            }
+            .settings-item input[type='color'] {
+                width: var(--equilateral-input-size);
+                height: var(--equilateral-input-size);
+            }
+            .settings-item input[type='checkbox'] {
+                width: var(--equilateral-input-size);
+                height: var(--equilateral-input-size);
+            }
+            .settings-item label {
+                font-size: var(--settings-font-size);
+                padding-right: 10px;
+            }
+        </style>
+        <style type="text/css" id="adaptability">
+            @media (max-width: 567px) {
+                :root {
+                    --heading-font-size: 55px;
+                    --settings-font-size: 40px;
+                    --icon-size: 40px;
+                }
+            }
+            @media (max-width: 400px) {
+                :root {
+                    --heading-font-size: 40px;
+                    --settings-font-size: 30px;
+                    --icon-size: var(--equilateral-input-size);
+                }
+            }
+            @media (max-width: 300px) {
+                :root {
+                    --heading-font-size: 30px;
+                    --settings-font-size: 20px;
+                    --icon-size: var(--equilateral-input-size);
+                }
+            }
+        </style>
+        <style type="text/css" id="animations">
+            @keyframes datetime-appearing {
+                from {
+                    color: transparent;
+                    transform: translateY(30px);
+                }
+            }
+            @keyframes icon-appearing {
+                from {
+                    color: transparent;
+                    transform: translateY(-100px);
+                }
+            }
+            @keyframes heading-appearing {
+                from {
+                    color: transparent;
+                    letter-spacing: 15px;
+                }
+            }
+            @keyframes settings-blocks-appearing {
+                from {
+                    transform: translateX(-300px);
+                }
+            }
+        </style>
+        <style type="text/css" id="scrollbar-style"></style>
+        <style type="text/css" id="too-small-style"></style>
     </head>
     <body>
-        <div id="settings-icon" class="icon icon-visible">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear-fill" viewBox="0 0 16 16">
-                <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"></path>
+        <a href="#settings" title="Show settings">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear-fill icon" viewBox="0 0 16 16">
+                <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 
+                1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 
+                1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 
+                2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 
+                0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 
+                10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
             </svg>
-        </div>
-        <div id="settings-container" style="display: none;">
-            <div class="element">
-                <input type="color" class="color" name="bg-color-selector" id="bg-color-selector" value="#ffffff">
-                <label for="bg-color-selector">Background color</label>
-            </div>
-            <div class="element">
-                <input type="color" class="color" name="font-color-selector" id="font-color-selector" value="#000000">
-                <label for="font-color-selector">Text color</label>
-            </div>
-        </div>
-        <div id="datetime-container" style="color: rgb(0, 0, 0);">
+        </a>
+        <div id="datetime-container" class="adjust-by-width">
             <div id="date-container">
                 <span id="date"></span>
             </div>
             <div id="time-container">
-                <span id="time-hms"></span>
+                <span id="time"></span>
                 <span id="time-ms"></span>
             </div>
         </div>
+        <div class="separator"></div>
+        <div class="heading">Settings</div>
+        <div id="settings">
+            <ul>
+                <li class="settings-item">
+                    <label for="text-color-selector">Text color:</label>
+                    <input type="color" id="text-color-selector" value="#000000">
+                </li>
+                <li class="settings-item">
+                    <label for="hide-ms-checkbox">Hide milliseconds:</label>
+                    <input type="checkbox" id="hide-ms-checkbox">
+                </li>
+                <!--
+                <li class="settings-item">
+                    <label for="hide-seconds-checkbox">Hide seconds:</label>
+                    <input type="checkbox" id="hide-seconds-checkbox">
+                </li>
+                -->
+                <li class="settings-item">
+                    <label for="hide-date-checkbox">Hide date:</label>
+                    <input type="checkbox" id="hide-date-checkbox">
+                </li>
+                <li class="settings-item">
+                    <label for="hide-scrollbar-checkbox">Hide scrollbar:</label>
+                    <input type="checkbox" id="hide-scrollbar-checkbox">
+                </li>
+                <li class="settings-item">
+                    <label for="hide-settings-button-checkbox">Hide settings button:</label>
+                    <input type="checkbox" id="hide-settings-button-checkbox">
+                </li>
+            </ul>
+        </div>
+        <script type="text/javascript" id="variables">
+            let millisecondsVisible = true;
+            let scrollbarVisible = true;
+            let settingsButtonVisible = true;
+            let dateVisible = true;
+            let secondsVisible = true;
+        </script>
+        <script type="text/javascript" id="useful-functions">
+            function toLength(s, l) {
+                return '0'.repeat(l - s.toString().length) + s.toString();
+            }
+            function getDateTime() {
+                const date = new Date();
+                return [
+                    toLength(date.getFullYear(), 4),
+                    toLength(date.getMonth() + 1, 2),
+                    toLength(date.getDate(), 2),
+                    toLength(date.getHours(), 2),
+                    toLength(date.getMinutes(), 2),
+                    toLength(date.getSeconds(), 2),
+                    toLength(date.getMilliseconds(), 3)
+                ];
+            }
+            function $(identificator) {
+                return document.getElementById(identificator);
+            }
+            function qs(selectors) {
+                return document.querySelector(selectors);
+            }
+        </script>
+        <script type="text/javascript" id="adaptability">
+            function onWindowResize() {
+                if (window.innerHeight < window.innerWidth * 0.15 + window.innerWidth * 0.15 * 0.71 + 50) {
+                    $('datetime-container').classList.remove('adjust-by-width');
+                    $('datetime-container').classList.add('adjust-by-height');
+                } else {
+                    $('datetime-container').classList.remove('adjust-by-height');
+                    $('datetime-container').classList.add('adjust-by-width');
+                }
+                if (window.innerWidth < 300 || window.innerHeight < 150) {
+                    document.body.classList.add('invisible');
+                } else {
+                    document.body.classList.remove('invisible');
+                }
+            }
+        </script>
+        <script type="text/javascript" id="datetime-script">
+            function fillDateTime() {
+                const dateTimeArray = getDateTime();
+                let date = dateTimeArray[0] + '-' + dateTimeArray[1] + '-' + dateTimeArray[2];
+                let time = dateTimeArray[3] + ':' + dateTimeArray[4];
+                if (secondsVisible) {
+                    time = time + ':' + dateTimeArray[5];
+                }
+                $('date').innerHTML = date;
+                $('time').innerHTML = time;
+                $('time-ms').innerHTML = '.' + dateTimeArray[6][0];
+            }
+        </script>
+        <script type="text/javascript" id="settings-script">
+            function changeTextColor() {
+                const value = $('text-color-selector').value;
+                $('datetime-container').style.color = value;
+                document.querySelectorAll('svg').forEach((element) => {element.style.color = value});
+            }
+            function millisecondsToggle() {
+                const label = $('time-ms');
+                if (millisecondsVisible) {
+                    label.style.display = 'none';
+                    millisecondsVisible = false;
+                } else {
+                    label.style.display = 'inline';
+                    millisecondsVisible = true;
+                }
+            }
+            function scrollbarToggle() {
+                const style = $('scrollbar-style');
+                if (scrollbarVisible) {
+                    style.innerHTML = 'body::-webkit-scrollbar {display: none;} body {-ms-overflow-style: none; scrollbar-width: none;}';
+                    scrollbarVisible = false;
+                } else {
+                    style.innerHTML = '';
+                    scrollbarVisible = true;
+                }
+            }
+            function settingsButtonToggle() {
+                const label = qs('svg.bi-gear-fill');
+                if (settingsButtonVisible) {
+                    label.style.display = 'none';
+                    settingsButtonVisible = false;
+                } else {
+                    label.style.display = 'inline';
+                    settingsButtonVisible = true;
+                }
+            }
+            function dateToggle() {
+                const label = $('date');
+                if (dateVisible) {
+                    label.style.display = 'none';
+                    dateVisible = false;
+                } else {
+                    label.style.display = 'inline';
+                    dateVisible = true;
+                }
+            }
+            function secondsToggle() {
+                if (secondsVisible) {
+                    secondsVisible = false;
+                } else {
+                    secondsVisible = true;
+                }
+            }
+        </script>
+        <script type="text/javascript" id="launcher">
+            function startup() {
+                $('text-color-selector').oninput = changeTextColor;
+                $('hide-ms-checkbox').oninput = millisecondsToggle;
+                $('hide-scrollbar-checkbox').oninput = scrollbarToggle;
+                $('hide-settings-button-checkbox').oninput = settingsButtonToggle;
+                $('hide-date-checkbox').oninput = dateToggle;
+                /* $('hide-seconds-checkbox').oninput = secondsToggle; */
+                setInterval(fillDateTime, 50);
+                window.addEventListener('resize', onWindowResize);
+            }
+            function run() {
+                startup();
+            }
+            run();
+        </script>
     </body>
-    <script>
-        let isSettingsVisible = false;
-function toLength(s, l) {
-    return '0'.repeat(l - s.toString().length) + s.toString();
-}
-function getDateTime() {
-    const date = new Date();
-    return [
-        toLength(date.getFullYear(), 4),
-        toLength(date.getMonth() + 1, 2),
-        toLength(date.getDate(), 2),
-        toLength(date.getHours(), 2),
-        toLength(date.getMinutes(), 2),
-        toLength(date.getSeconds(), 2),
-        toLength(date.getMilliseconds(), 3)
-    ];
-}
-function fillLabels() {
-    const dateTimeArray = getDateTime();
-    document.querySelector('span#time-hms').innerHTML = dateTimeArray[3] + ':' + dateTimeArray[4] + ':' + dateTimeArray[5];
-    document.querySelector('span#time-ms').innerHTML = '.' + dateTimeArray[6][0];
-    document.querySelector('span#date').innerHTML = dateTimeArray[0] + '-' + dateTimeArray[1] + '-' + dateTimeArray[2];
-}
-function changeBgColor() {
-    document.querySelector('html').style.background = document.querySelector('input#bg-color-selector').value;
-}
-function changeFontColor() {
-    let value = document.querySelector('input#font-color-selector').value;
-    document.querySelector('div#datetime-container').style.color = value;
-    document.querySelector('svg').style.color = value;
-}
-function settingsToggle() {
-    const settingsContainer = document.querySelector('div#settings-container')
-    const datetimeContainer = document.querySelector('div#datetime-container')
-    if (isSettingsVisible) {
-        settingsContainer.style.display = 'none';
-        datetimeContainer.style.display = 'block';
-        isSettingsVisible = false;
-    } else if (!isSettingsVisible) {
-        settingsContainer.style.display = 'block';
-        datetimeContainer.style.display = 'none';
-        isSettingsVisible = true;
-    }
-}
-document.querySelector('input#bg-color-selector').oninput = changeBgColor;
-document.querySelector('input#font-color-selector').oninput = changeFontColor;
-document.querySelector('div#settings-icon').onclick = settingsToggle;
-setInterval(fillLabels, 50);
-
-    </script>
 </html>
